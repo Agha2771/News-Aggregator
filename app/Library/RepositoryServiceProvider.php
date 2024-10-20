@@ -1,8 +1,8 @@
 <?php namespace Image;
 
 use Illuminate\Support\ServiceProvider;
-use News\Repositories\News\ImageEloquentRepository;
-use News\Repositories\News\ImageRepositoryInterface;
+use News\Repositories\Article\ArticleEloquentRepository;
+use News\Repositories\Article\ArticleRepositoryInterface;
 use News\Repositories\User\UserEloquentRepository;
 use News\Repositories\User\UserRepositoryInterface;
 
@@ -13,7 +13,7 @@ class RepositoryServiceProvider extends ServiceProvider {
 
 		$bindings = [
 			[ UserRepositoryInterface::class, UserEloquentRepository::class ],
-			[ ImageRepositoryInterface::class, ImageEloquentRepository::class ],
+			[ ArticleRepositoryInterface::class, ArticleEloquentRepository::class ],
 
 		];
 		$this->bindInterfacesWithTheirImplementations( $bindings );
