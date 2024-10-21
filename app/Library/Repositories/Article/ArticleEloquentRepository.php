@@ -45,4 +45,23 @@ class ArticleEloquentRepository extends EloquentRepository implements ArticleRep
     {
         return $this->model->findOrFail($id);
     }
+
+    public function getPersonalizedArticles($preferences)
+    {
+        $query = $this->model->query();
+
+        if ($preferences) {
+            if ($preferences->preferred_source) {
+                $query->where('source', $preferences->preferred_source);
+            }
+            if ($preferences->preferred_category) {
+                $query->where('category', $preferences->preferred_category);
+            }
+            if ($preferences->preferred_author) {
+                $query->where('author', $preferences->preferred_author);
+            }
+        }
+
+        return $query->paginate(10);
+    }
 }

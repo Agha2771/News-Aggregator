@@ -6,6 +6,9 @@ use News\Repositories\Article\ArticleRepositoryInterface;
 use News\Repositories\User\UserEloquentRepository;
 use News\Repositories\User\UserRepositoryInterface;
 
+use News\Repositories\Preference\PreferenceRepositoryInterface;
+use News\Repositories\Preference\PreferenceEloquentRepository;
+
 
 class RepositoryServiceProvider extends ServiceProvider {
 
@@ -14,6 +17,7 @@ class RepositoryServiceProvider extends ServiceProvider {
 		$bindings = [
 			[ UserRepositoryInterface::class, UserEloquentRepository::class ],
 			[ ArticleRepositoryInterface::class, ArticleEloquentRepository::class ],
+			[ PreferenceRepositoryInterface::class, PreferenceEloquentRepository::class ],
 
 		];
 		$this->bindInterfacesWithTheirImplementations( $bindings );
