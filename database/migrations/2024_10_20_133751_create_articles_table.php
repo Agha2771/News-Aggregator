@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('author')->index();
             $table->string('category')->index();
             $table->string('source')->index();
+            $table->string('url')->nullable();
             $table->timestamp('published_at')->index();
             $table->timestamps();
             $table->index(['category', 'published_at']);

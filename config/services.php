@@ -31,4 +31,19 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'newsapi' => [
+        'url' => env('NEWS_API_URL', 'https://newsapi.org/v2/top-headlines'), // Default URL if env not set
+        'key' => env('NEWS_API_KEY'),
+    ],
+
+    'nytapi' => [
+        'url' => env('NY_API_URL', 'https://api.nytimes.com/svc/search/v2/articlesearch.json'), // Default URL
+        'key' => env('NY_API_KEY'),
+    ],
+
+    'guardian' => [
+        'url' => env('GUARDIAN_API_URL', 'https://content.guardianapis.com/search'), // Default URL if env not set
+        'key' => env('GUARDIAN_API_KEY'),
+    ],
+
 ];
