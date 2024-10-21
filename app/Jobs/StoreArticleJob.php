@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use News\Models\Article; // Assuming the Article model is under App\Models
+use News\Models\Article;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,38 +14,21 @@ class StoreArticleJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * The article data to be stored.
-     *
-     * @var array
-     */
-    protected array $articleData;
+    protected $articleData;
+    protected $source;
 
-    /**
-     * The source of the article.
-     *
-     * @var string
-     */
-    protected string $source;
+    // Number of times to attempt the job
+    public $tries = 5;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param array $articleData
-     * @param string $source
-     * @return void
-     */
+    // Timeout in seconds for the job
+    public $timeout = 60;
+
     public function __construct(array $articleData, string $source)
     {
         $this->articleData = $articleData;
         $this->source = $source;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
         try {
@@ -61,10 +44,13 @@ class StoreArticleJob implements ShouldQueue
                 ]
             );
         } catch (\Exception $e) {
-            Log::error('Failed to store article: ' . $e->getMessage(), [
-                'articleData' => $this->articleData,
-                'source' => $this->source,
+            Log::error('Failed to store article', [
+                'error' => $e->getMessage(),
+                'article' => $this->articleData,
             ]);
+
+            // Optionally rethrow the exception to indicate failure
+            throw $e;
         }
     }
 }
