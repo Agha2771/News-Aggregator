@@ -14,7 +14,7 @@ use News\Traits\ApiResponseTrait;
 
 class PreferenceController extends Controller
 {
-    use ApiResponseTrait;
+    use ApiResponseTrait; 
 
     protected PreferenceRepositoryInterface $userPreferenceRepository;
     protected ArticleRepositoryInterface $articleRepository;
@@ -60,7 +60,12 @@ class PreferenceController extends Controller
     {
 
         $preferences = $this->userPreferenceRepository->getPreferencesByUserId(Auth::id());
-        $articles = $this->articleRepository->getPersonalizedArticles($preferences);
+        $data = [
+            'preferred_source' =>  $preferences->pluck('preferred_source'),
+            'preferred_category' =>  $preferences->pluck('preferred_category'),
+            'preferred_author' =>  $preferences->pluck('preferred_author'),
+        ];
+        $articles = $this->articleRepository->getPersonalizedArticles($data);
         return $this->successResponse($articles, ResponseMessage::OK , Response::HTTP_OK);
     }
 }

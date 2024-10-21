@@ -49,19 +49,25 @@ class ArticleEloquentRepository extends EloquentRepository implements ArticleRep
     public function getPersonalizedArticles($preferences)
     {
         $query = $this->model->query();
-
+    
         if ($preferences) {
-            if ($preferences->preferred_source) {
-                $query->where('source', $preferences->preferred_source);
+            // Check if 'preferred_source' is not empty and does not contain null
+            if (count($preferences['preferred_source']) > 0 && !in_array(null, $preferences['preferred_source']->toArray())) {
+                $query->whereIn('source', $preferences['preferred_source']);
             }
-            if ($preferences->preferred_category) {
-                $query->where('category', $preferences->preferred_category);
+    
+            // Check if 'preferred_category' is not empty and does not contain null
+            if (count($preferences['preferred_category']) > 0 && !in_array(null, $preferences['preferred_category']->toArray())) {
+                $query->whereIn('category', $preferences['preferred_category']);
             }
-            if ($preferences->preferred_author) {
-                $query->where('author', $preferences->preferred_author);
+    
+            // Check if 'preferred_author' is not empty and does not contain null
+            if (count($preferences['preferred_author']) > 0 && !in_array(null, $preferences['preferred_author']->toArray())) {
+                $query->whereIn('author', $preferences['preferred_author']);
             }
         }
-
-        return $query->paginate(10);
+    
+        return $query->get();
     }
+      
 }

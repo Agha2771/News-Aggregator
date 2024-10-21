@@ -2,7 +2,6 @@
 
 namespace News\Repositories\Preference;
 
-use Carbon\Carbon;
 use News\Abstracts\EloquentRepository;
 use News\Models\Preference;
 
@@ -15,7 +14,7 @@ class PreferenceEloquentRepository extends EloquentRepository implements Prefere
 
     public function getPreferencesByUserId($userId)
     {
-        return $this->model::where('user_id', $userId)->first();
+        return $this->model::where('user_id', $userId)->get();
     }
 
     public function createOrUpdatePreferences($userId, array $data)

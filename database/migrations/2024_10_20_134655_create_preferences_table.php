@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('preferences', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->json('preferred_sources')->nullable();
-            $table->json('preferred_categories')->nullable();
-            $table->json('preferred_authors')->nullable();
+            $table->string('preferred_source')->nullable();
+            $table->string('preferred_category')->nullable();
+            $table->string('preferred_author')->nullable();
             $table->timestamps();
         });
     }
