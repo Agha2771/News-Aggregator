@@ -13,11 +13,10 @@ class UserEloquentRepository extends EloquentRepository implements UserRepositor
   }
 
   public function create($data){
+    
       $user = new $this->model();
       $user->name = $data['name'];
       $user->email = $data['email'];
-      $user->age = $data['age'];
-      $user->profile_picture = $data['image'];
       $user->password = Hash::make($data['password']);
       $user->save();
       return $user;
@@ -29,31 +28,9 @@ class UserEloquentRepository extends EloquentRepository implements UserRepositor
       if(isset($data['name'])){
           $user->name = $data['name'];
       }
-
-      if(isset($data['age'])){
-          $user->age = $data['age'];
-      }
-
-      if(isset($data['profileImage']) and $data['profileImage']){
-          $user->profile_picture = $data['profileImage'];
-      }
-
-      if(isset($data['verificationCode'])){
-          $user->verification_code = $data['verificationCode'];
-      }
-
-      if(isset($data['verificationCodeSentAt'])){
-          $user->verification_code_sent_at = $data['verificationCodeSentAt'];
-      }
-
-      if(isset($data['isVerified'])){
-          $user->is_verified = $data['isVerified'];
-      }
-
       if(isset($data['password'])){
           $user->password = Hash::make($data['password']);
       }
-
       $user->save();
       return $user;
   }

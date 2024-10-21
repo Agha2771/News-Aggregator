@@ -1,4 +1,4 @@
-<?php namespace Image;
+<?php namespace News;
 
 use Illuminate\Support\ServiceProvider;
 use News\Repositories\Article\ArticleEloquentRepository;

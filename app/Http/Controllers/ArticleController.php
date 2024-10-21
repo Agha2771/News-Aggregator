@@ -24,8 +24,21 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['keyword', 'date', 'category', 'source']);
-        $articles = ArticleResource::collection($this->articleRepository->getAllArticles($filters));
-        return $this->successResponse($articles , ResponseMessage::OK , Response::HTTP_OK);
+        $paginatedArticles = $this->articleRepository->getAllArticles($filters);
+    
+        $articles = ArticleResource::collection($paginatedArticles);
+    
+        // Prepare the response data
+        $responseData = [
+            'records' => $articles,
+            'meta' => [
+                'current_page' => $paginatedArticles->currentPage(),
+                'total_pages' => $paginatedArticles->lastPage(),
+                'total_records' => $paginatedArticles->total(),
+            ],
+        ];
+    
+        return $this->successResponse($responseData, ResponseMessage::OK, Response::HTTP_OK);
     }
 
     public function show($id)

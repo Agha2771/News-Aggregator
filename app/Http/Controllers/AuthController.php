@@ -13,6 +13,8 @@ use News\ValidationRequests\ForgotPasswordRequest;
 use News\ValidationRequests\LoginRequests;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Support\Facades\Password;
+use News\Repositories\User\UserRepositoryInterface;
+
 
 
 
@@ -26,16 +28,19 @@ class AuthController extends Controller
      * @param UserRegisterRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+
+    protected $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+
     public function register(UserRegisterRequest $request)
     {
-        $validatedData = $request->validated(); // Use validated data directly
-
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
-        ]);
-
+        $validatedData = $request->prepareRequest();
+        $user = $this->userRepository->create($validatedData);
         $token = $user->createToken('auth_token')->plainTextToken;
         return $this->successResponse($this->respondWithToken($token), 'User registered successfully!', Response::HTTP_CREATED);
     }
@@ -91,7 +96,7 @@ class AuthController extends Controller
      */
     public function sendResetLink(ForgotPasswordRequest $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = $this->userRepository->getByEmail($request->email);
         $token = Password::createToken($user);
         $user->notify(new ResetPasswordNotification($token));
 

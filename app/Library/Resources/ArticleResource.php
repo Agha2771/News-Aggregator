@@ -18,9 +18,9 @@ class ArticleResource extends JsonResource
             'author' => $this->author,
             'category' => $this->category,
             'source' => $this->source,
-            'published_at' => $this->published_at->toISOString(), 
-            'created_at' => $this->created_at->toISOString(),
-            'updated_at' => $this->updated_at->toISOString(),
+            'published_at' => $this->published_at, 
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
