@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Auth\AuthenticationException;
 use News\Traits\ApiResponseTrait;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 
 class Handler extends ExceptionHandler
@@ -36,6 +37,11 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof NotFoundHttpException) {
             return $this->failureResponse('Endpoint not found', 404);
+        }
+
+        if ($exception instanceof ValidationException) {
+            // Return the validation errors with a 422 status code
+            return $this->failureResponse($exception->errors(), 422);
         }
 
         if ($exception instanceof AuthenticationException) {
