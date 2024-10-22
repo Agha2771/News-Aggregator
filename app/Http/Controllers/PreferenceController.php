@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\XSSProtection;
 use News\Repositories\Preference\PreferenceRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -23,6 +24,7 @@ class PreferenceController extends Controller
         PreferenceRepositoryInterface $userPreferenceRepository,
         ArticleRepositoryInterface $articleRepository
     ) {
+        $this->middleware(XSSProtection::class)->only(['store']);
         $this->userPreferenceRepository = $userPreferenceRepository;
         $this->articleRepository = $articleRepository;
     }

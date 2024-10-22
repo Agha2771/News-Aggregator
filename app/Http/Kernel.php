@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check.sanctum.token' => \App\Http\Middleware\CheckSanctumToken::class,
+        'xss' => \App\Http\Middleware\XSSProtection::class,
     ];
 }
