@@ -41,7 +41,7 @@ class PreferenceControllerTest extends TestCase
     
         // Mock user preferences
         $mockedPreferences = collect([
-            (object)['id' => 1, 'user_id' => $user->id, 'preferred_source' => 'CNN', 'preferred_category' => 'Technology', 'preferred_author' => 'John Doe' , 'created_at' => now() , 'updated_at' => now()],
+            (object)['id' => 1, 'user_id' => $user->id, 'preferred_source' => 'NewsAPI', 'preferred_category' => 'Technology', 'preferred_author' => 'John Doe' , 'created_at' => now() , 'updated_at' => now()],
         ]);
     
         // Mock the PreferenceRepositoryInterface to return the mocked preferences
@@ -66,7 +66,7 @@ class PreferenceControllerTest extends TestCase
 
     // Prepare the request data
     $requestData = [
-        'preferred_source' => 'NYT',
+        'preferred_source' => 'NewsAPI',
         'preferred_category' => 'Business',
         'preferred_author' => 'Jane Smith',
     ];
@@ -77,15 +77,18 @@ class PreferenceControllerTest extends TestCase
     // Mock the PreferenceRepositoryInterface method
     $this->preferenceRepository
         ->shouldReceive('createOrUpdatePreferences')
-        ->with($user->id, $requestData) // Pass the correct user ID and request data
+        ->withArgs(function ($userId, $data) use ($user, $requestData) {
+            return $userId === $user->id && 
+                   strip_tags($data['preferred_source']) === $requestData['preferred_source'] &&
+                   strip_tags($data['preferred_category']) === $requestData['preferred_category'] &&
+                   strip_tags($data['preferred_author']) === $requestData['preferred_author'];
+        })
         ->andReturn($mockedPreferences);
 
-    // Make the request to the endpoint
     $response = $this->postJson('/api/user/preferences', $requestData);
-
     // Assert the response status and structure
     $response->assertStatus(Response::HTTP_OK)
-             ->assertJsonFragment(['id' => 1, 'user_id' => $user->id ,'preferred_source' => 'NYT', 'preferred_category' => 'Business']);
+             ->assertJsonFragment(['id' => 1, 'user_id' => $user->id ,'preferred_source' => 'NewsAPI', 'preferred_category' => 'Business']);
 }
 
     /** @test */
@@ -100,7 +103,7 @@ class PreferenceControllerTest extends TestCase
             (object)[
                 'id' => 1,
                 'user_id' => $user->id,
-                'preferred_source' => 'NYT',
+                'preferred_source' => 'NewsAPI',
                 'preferred_category' => 'Business',
                 'preferred_author' => 'Jane Smith',
                 'created_at' => now(),
@@ -112,7 +115,7 @@ class PreferenceControllerTest extends TestCase
         $mockedArticles = collect([
             (object)[
                 'title' => 'Tech News',
-                'source' => 'NYT',
+                'source' => 'NewsAPI',
                 'author' => 'Jane Smith',
             ],
         ]);

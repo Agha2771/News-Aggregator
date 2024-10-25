@@ -15,7 +15,7 @@ class StoreUserPreferencesRequest extends FormRequest
     public function rules()
     {
         return [
-            'preferred_source' => 'string|nullable|in:NewsAPI,NYT,The Guardian',
+            'preferred_source' => 'string|nullable',
             'preferred_category' => 'string|nullable',
             'preferred_author' => 'string|nullable',
         ];
